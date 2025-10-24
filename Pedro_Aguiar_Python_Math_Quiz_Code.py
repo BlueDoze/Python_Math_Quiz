@@ -2,9 +2,6 @@ import random
 import time
 import math
 
-# Leaderboard file
-LEADERBOARD_FILE = "leaderboard.txt"
-
 def mathQuizGame():
     """
     Main function to start the Math Quiz Game.
@@ -89,10 +86,8 @@ def single_player_game():
                     print(f"Difficulty decreased to: {difficulty_levels[current_difficulty_index]}")
                     consecutive_incorrect = 0
 
-            # Display the final score and update the leaderboard
+            # Display the final score
             print(f"Your final score is {score_points}.")
-            save_score(score_points)
-            display_leaderboard()
             break
 
         elif menu == "2" or menu == "exit":
@@ -176,9 +171,7 @@ def multiplayer_game():
         print("It's a tie!")
 
     # Save scores to the leaderboard
-    save_score(player1_score, player1_name)
-    save_score(player2_score, player2_name)
-    display_leaderboard()
+    # Scores are not persisted in this build (no leaderboard file)
 
 
 def generate_problem(difficulty):
@@ -221,54 +214,6 @@ def generate_problem(difficulty):
             angle = random.randint(0, 90)
             return f"What is sin({angle})?", round(math.sin(math.radians(angle)), 2)
 
-
-def save_score(score, name="Player"):
-    """
-    Saves the player's score to the leaderboard file.
-    Args:
-        score (int): The player's score.
-        name (str): The player's name.
-    """
-    with open(LEADERBOARD_FILE, "a") as file:
-        file.write(f"{name}: {score}\n")
-
-
-def display_leaderboard():
-    """
-    Displays the leaderboard by reading from the leaderboard file.
-    Handles errors such as missing or malformed entries gracefully.
-    """
-    try:
-        with open(LEADERBOARD_FILE, "r") as file:
-            scores = []
-            for line in file.readlines():
-                # Remove whitespace and ignore empty lines
-                line = line.strip()
-                if not line:
-                    continue
-
-                # Split the line into name and score
-                parts = line.split(": ")
-                if len(parts) == 2:  # Ensure there are exactly two elements
-                    name, score = parts
-                    try:
-                        scores.append((name, int(score)))  # Convert score to integer
-                    except ValueError:
-                        print(f"Ignoring invalid score in line: {line}")
-                else:
-                    print(f"Invalid format in line: {line}")
-
-        # Sort scores in descending order
-        scores.sort(key=lambda x: x[1], reverse=True)
-
-        # Display the leaderboard
-        print("\n--- Leaderboard ---")
-        for i, (name, score) in enumerate(scores[:5], 1):
-            print(f"{i}. {name}: {score}")
-        print("-------------------")
-
-    except FileNotFoundError:
-        print("No score records found.")
 
 
 if __name__ == "__main__":

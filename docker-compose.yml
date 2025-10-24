@@ -1,0 +1,11 @@
+version: "3.8"
+
+services:
+  quiz:
+    build: .
+    image: python-math-quiz:latest
+    container_name: python_math_quiz
+    stdin_open: true   # keep STDIN open for interactive input
+    tty: true          # allocate a pseudo-TTY so interactive prompts work
+    working_dir: /app
+    command: python Pedro_Aguiar_Python_Math_Quiz_Code.py
